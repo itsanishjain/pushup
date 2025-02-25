@@ -25,3 +25,15 @@ export const notifications = sqliteTable("notifications", {
   created_at: integer("created_at").default(sql`CURRENT_TIMESTAMP`),
   updated_at: integer("updated_at").default(sql`CURRENT_TIMESTAMP`),
 });
+
+// create a relation between users and notifications
+export const userRelations = relations(users, ({ many }) => ({
+  notifications: many(notifications),
+}));
+
+export const notificationRelations = relations(notifications, ({ one }) => ({
+  user: one(users, {
+    fields: [notifications.user_id],
+    references: [users.id],
+  }),
+}));

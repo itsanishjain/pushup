@@ -4,6 +4,22 @@ import { eq, desc } from "drizzle-orm";
 
 const QUERIES = {
   // User queries
+  getUserCountByEvent: async (event: string) => {
+    try {
+      const count = await db.query.notifications.findMany({
+        with: {
+          user: true,
+        },
+        where: eq(notifications.event, event),
+      });
+      console.log(count);
+      return count.length;
+    } catch (error) {
+      console.error(error);
+      return 0;
+    }
+  },
+
   getUser: async (userId: string) => {
     return await db.query.users.findFirst({
       where: eq(users.id, userId),

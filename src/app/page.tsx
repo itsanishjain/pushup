@@ -1,12 +1,13 @@
 import { Suspense } from "react";
 import NotificationForm from "@/components/NotificationForm";
-import { db } from "@/lib/db"; // Assuming you have this setup
 import { NotificationEventEnum } from "@/lib/types/notification-api";
 import Link from "next/link";
+import QUERIES from "@/lib/queries";
 
 async function getUserCountByEvent(event: string) {
-  // This would be your actual DB query
-  // For now returning dummy data
+  const count = await QUERIES.getUserCountByEvent(event);
+  // return count.length;
+
   return 10;
 }
 

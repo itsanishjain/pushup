@@ -6,15 +6,15 @@ import QUERIES from "@/lib/queries";
 
 async function getUserCountByEvent(event: string) {
   const count = await QUERIES.getUserCountByEvent(event);
-  // return count.length;
+  return count;
 
-  return 10;
+  // return 10;
 }
 
 export default async function DashboardPage() {
   // Fetch initial data
   const events = Object.values(NotificationEventEnum.enum);
-  const initialUserCount = await getUserCountByEvent(events[0]);
+  const userCount = await getUserCountByEvent(events[0]);
 
   return (
     <div className="flex h-screen">
@@ -42,10 +42,7 @@ export default async function DashboardPage() {
       <main className="flex-1 p-8">
         <h1 className="text-2xl font-bold mb-6">Trigger Notification</h1>
         <Suspense fallback={<div>Loading...</div>}>
-          <NotificationForm
-            events={events}
-            initialUserCount={initialUserCount}
-          />
+          <NotificationForm events={events} userCount={userCount} />
         </Suspense>
       </main>
     </div>

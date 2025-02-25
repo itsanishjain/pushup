@@ -7,10 +7,10 @@ const QUERIES = {
   getUserCountByEvent: async (event: string) => {
     try {
       const count = await db.query.notifications.findMany({
-        with: {
-          user: true,
-        },
-        where: eq(notifications.event, event),
+        // with: {
+        //   user: true,
+        // },
+        where: eq(notifications.message, "hello"),
       });
       console.log(count);
       return count.length;

@@ -19,7 +19,7 @@ export const notifications = sqliteTable("notifications", {
   user_id: text("user_id").references(() => users.id, {
     onDelete: "cascade",
   }), // foreign key to users
-  event: text("event"), // e.g., "app_opened", "streak_missed"
+  event_type: text("event_type"), // e.g., "app_opened", "streak_missed"
   message: text("message"),
   status: text("status"), // e.g., "pending", "sent", "failed"
   created_at: integer("created_at").default(sql`CURRENT_TIMESTAMP`),

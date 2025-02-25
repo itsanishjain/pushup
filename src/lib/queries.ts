@@ -7,10 +7,10 @@ const QUERIES = {
   getUserCountByEvent: async (event: string) => {
     try {
       const count = await db.query.notifications.findMany({
-        // with: {
-        //   user: true,
-        // },
-        where: eq(notifications.message, "hello"),
+        with: {
+          user: true,
+        },
+        where: eq(notifications.event_type, event),
       });
       console.log(count);
       return count.length;
@@ -55,7 +55,7 @@ const QUERIES = {
 
   getNotificationsByEvent: async (event: string) => {
     return await db.query.notifications.findMany({
-      where: eq(notifications.event, event),
+      where: eq(notifications.event_type, event),
       orderBy: desc(notifications.created_at),
     });
   },

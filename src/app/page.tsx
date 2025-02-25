@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button"; // from shadcn/ui components
-import { Input } from "@/components/ui/input"; // from shadcn/ui components
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function DashboardPage() {
   // Example state for creating a notification

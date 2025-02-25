@@ -6,7 +6,14 @@ export const UserCreateSchema = z.object({
   userType: z.enum(["instructor", "learner"]),
 });
 
+export const UpdateUserSchema = z.object({
+  userId: z.string().uuid(),
+  expoPushToken: z.string().optional(),
+  platform: z.enum(["ios", "android"]).optional(),
+});
+
 export type UserCreate = z.infer<typeof UserCreateSchema>;
+export type UpdateUser = z.infer<typeof UpdateUserSchema>;
 
 export const UserSchema = z.object({
   id: z.string(),

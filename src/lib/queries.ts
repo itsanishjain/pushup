@@ -1,42 +1,68 @@
 import { db } from "@/lib/db";
-import { users, bookings } from "@/drizzle/schema";
-import { eq, asc } from "drizzle-orm";
+import { users, notifications } from "@/drizzle/schema";
+import { eq, desc } from "drizzle-orm";
 
 const QUERIES = {
-  user: async (userId: string, userType: string) => {
+  // User queries
+  getUser: async (userId: string) => {
     return await db.query.users.findFirst({
-      with: {
-        instructorProfile: userType === "instructor" ? true : undefined,
-        learnerProfile: userType === "learner" ? true : undefined,
-      },
       where: eq(users.id, userId),
     });
   },
-  getInstructors: async () => {
+
+  getAllUsers: async () => {
     return await db.query.users.findMany({
-      where: eq(users.role, "instructor"),
-      with: {
-        instructorProfile: true,
-      },
+      orderBy: desc(users.created_at),
     });
   },
-  getInstructor: async (instructorId: string) => {
-    return await db.query.users.findFirst({
-      where: eq(users.id, instructorId),
-      with: {
-        instructorProfile: true,
-      },
+
+  getActiveUsers: async () => {
+    return await db.query.users.findMany({
+      where: eq(users.is_active, 1),
     });
   },
-  getBookings: async (learnerId: string) => {
-    return await db.query.bookings.findMany({
-      orderBy: asc(bookings.start_time),
-      with: {
-        instructor: true,
-        learner: true,
-      },
-      where: eq(bookings.learner_id, learnerId),
+
+  // Notification queries
+  getUserNotifications: async (userId: string) => {
+    return await db.query.notifications.findMany({
+      where: eq(notifications.user_id, userId),
+      orderBy: desc(notifications.created_at),
     });
+  },
+
+  getUnreadNotifications: async (userId: string) => {
+    return await db.query.notifications.findMany({
+      where: eq(notifications.user_id, userId),
+      orderBy: desc(notifications.created_at),
+    });
+  },
+
+  getNotificationsByEvent: async (event: string) => {
+    return await db.query.notifications.findMany({
+      where: eq(notifications.event, event),
+      orderBy: desc(notifications.created_at),
+    });
+  },
+
+  // Platform specific queries
+  getUsersByPlatform: async (platform: string) => {
+    return await db.query.users.findMany({
+      where: eq(users.platform, platform),
+    });
+  },
+
+  // Combined queries
+  getUserWithNotifications: async (userId: string) => {
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+    });
+
+    const notificationsResponse = await db.query.notifications.findMany({
+      where: eq(notifications.user_id, userId),
+      orderBy: desc(notifications.created_at),
+    });
+
+    return { user, notifications: notificationsResponse };
   },
 };
 

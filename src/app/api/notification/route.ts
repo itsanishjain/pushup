@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     const newNotification = await db.insert(notifications).values({
       user_id: userId,
-      event: event,
+      event_type: event,
       message: message,
       status: status,
       created_at: new Date().getTime(),

@@ -7,21 +7,34 @@ import {
   NotificationEventEnum,
   NotificationRequestSchema,
 } from "@/lib/types/notification-api";
+import QUERIES from "@/lib/queries";
 import type { z } from "zod";
 
 interface NotificationFormProps {
   events: z.infer<typeof NotificationEventEnum>[];
-  userCount: number;
+  initialUserCount: number;
 }
 
 export default function NotificationForm({
   events,
-  userCount,
+  initialUserCount,
 }: NotificationFormProps) {
   const [event, setEvent] = React.useState<
     z.infer<typeof NotificationEventEnum>
   >(events[0]);
   const [message, setMessage] = React.useState("");
+  const [userCount, setUserCount] = React.useState(initialUserCount);
+
+  React.useEffect(() => {
+    const fetchUserCount = async () => {
+      const res = await fetch(`/api/user/count?event=${event}`);
+      if (res.ok) {
+        const data = await res.json();
+        setUserCount(data.count);
+      }
+    };
+    fetchUserCount();
+  }, [event]);
 
   const handleTriggerNotification = async () => {
     try {

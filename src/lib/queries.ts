@@ -5,6 +5,7 @@ import { eq, desc } from "drizzle-orm";
 const QUERIES = {
   // User queries
   getUserCountByEvent: async (event: string) => {
+    console.log(event);
     try {
       const count = await db.query.notifications.findMany({
         with: {

@@ -26,6 +26,7 @@ export default function RootLayout({
         >
           <Progress />
           <Toaster />
+          {children}
         </ThemeProvider>
       </body>
     </html>

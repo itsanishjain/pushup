@@ -2,25 +2,22 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { notifications } from "@/drizzle/schema";
 import { NotificationCreateSchema } from "@/lib/types/notification-api";
-import { getCookieFromHeader } from "@/lib/auth";
-import { headers } from "next/headers";
 
 export async function POST(request: NextRequest) {
   try {
-    const userId = getCookieFromHeader("user_id", headers().get("cookie"));
+    const body = await request.json();
+    const { userId, event, message, status } =
+      NotificationCreateSchema.parse(body);
 
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json();
-    const notification = NotificationCreateSchema.parse(body);
-
     const newNotification = await db.insert(notifications).values({
       user_id: userId,
-      event: notification.event,
-      message: notification.message,
-      status: notification.status,
+      event: event,
+      message: message,
+      status: status,
       created_at: new Date().getTime(),
       updated_at: new Date().getTime(),
     });

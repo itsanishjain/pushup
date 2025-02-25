@@ -10,6 +10,7 @@ export const NotificationEventEnum = z.enum([
 ]);
 
 export const NotificationCreateSchema = z.object({
+  userId: z.string(),
   event: NotificationEventEnum, // Use enum for predefined events
   message: z.string(),
   status: z.enum(["unread", "read"]).default("unread"),

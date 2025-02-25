@@ -1,16 +1,16 @@
 # Pushup
 
-**Pushup** is an open-source, serverless push notification system designed for modern web and mobile applications. It lets you trigger notifications based on specific user events through a clean, easy-to-use dashboard.
+**Pushup** is an open-source, serverless push notification system designed for modern web and mobile applications. It lets you trigger notifications based on specific user events through a clean, easy-to-use dashboard/apis so call it from you react native code
 
 ## What It Does
 
-- **Event-Driven Notifications:**  
+- **Event-Driven Notifications:**
   Pushup listens for predefined events (such as when a user opens the app, misses a daily goal, or achieves a milestone) and sends notifications accordingly. This helps you keep users engaged by reminding or congratulating them at the right moments.
 
-- **Simple Dashboard Interface:**  
+- **Simple Dashboard Interface:**
   With an intuitive dashboard built using modern UI tools, you can easily simulate events and trigger notifications in real time. This dashboard is designed for quick testing and easy management of notifications.
 
-- **Serverless API Integration:**  
+- **Serverless API Integration:**
   The backend is built on serverless principles, making it lightweight and easy to deploy. It handles API requests, validates events, and logs notification activities without the overhead of traditional servers.
 
 - **Lightweight Data Storage:**  

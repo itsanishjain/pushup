@@ -7,7 +7,6 @@ import {
   NotificationEventEnum,
   NotificationRequestSchema,
 } from "@/lib/types/notification-api";
-import QUERIES from "@/lib/queries";
 import type { z } from "zod";
 
 interface NotificationFormProps {
@@ -24,6 +23,7 @@ export default function NotificationForm({
   >(events[0]);
   const [message, setMessage] = React.useState("");
   const [userCount, setUserCount] = React.useState(initialUserCount);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
     const fetchUserCount = async () => {
@@ -38,6 +38,7 @@ export default function NotificationForm({
 
   const handleTriggerNotification = async () => {
     try {
+      setIsLoading(true);
       const payload = NotificationRequestSchema.parse({ event, message });
       const res = await fetch("/api/expo", {
         method: "POST",
@@ -53,6 +54,8 @@ export default function NotificationForm({
     } catch (error) {
       console.error(error);
       alert("Error triggering notification");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -99,8 +102,8 @@ export default function NotificationForm({
         />
       </div>
 
-      <Button type="submit" className="mt-4">
-        Trigger Notification
+      <Button type="submit" className="mt-4" disabled={isLoading}>
+        {isLoading ? "Sending..." : "Trigger Notification"}
       </Button>
     </form>
   );

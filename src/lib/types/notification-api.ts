@@ -9,6 +9,29 @@ export const NotificationEventEnum = z.enum([
   "custom_event",
 ]);
 
+export const ExpoPushTokenSchema = z.object({
+  token: z.string().startsWith("ExponentPushToken["),
+});
+
+export const UserNotificationSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  expoPushToken: z.string(),
+  event: NotificationEventEnum,
+  lastActive: z.date(),
+});
+
+export const NotificationRequestSchema = z.object({
+  event: NotificationEventEnum,
+  message: z.string(),
+});
+
+export const ExpoNotificationSchema = z.object({
+  to: z.string(),
+  title: z.string(),
+  body: z.string(),
+});
+
 export const NotificationCreateSchema = z.object({
   userId: z.string(),
   event: NotificationEventEnum, // Use enum for predefined events
@@ -29,3 +52,7 @@ export const NotificationResponseSchema = z.object({
 });
 
 export type NotificationResponse = z.infer<typeof NotificationResponseSchema>;
+
+export type NotificationRequest = z.infer<typeof NotificationRequestSchema>;
+export type ExpoNotification = z.infer<typeof ExpoNotificationSchema>;
+export type UserNotification = z.infer<typeof UserNotificationSchema>;

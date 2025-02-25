@@ -1,35 +1,19 @@
-"use client";
-
-import React from "react";
+import { Suspense } from "react";
+import NotificationForm from "@/components/NotificationForm";
+import { db } from "@/lib/db"; // Assuming you have this setup
+import { NotificationEventEnum } from "@/lib/types/notification-api";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
-export default function DashboardPage() {
-  // Example state for creating a notification
-  const [event, setEvent] = React.useState("app_opened");
-  const [message, setMessage] = React.useState("");
+async function getUserCountByEvent(event: string) {
+  // This would be your actual DB query
+  // For now returning dummy data
+  return 10;
+}
 
-  // This would be replaced with your API call
-  const handleTriggerNotification = async () => {
-    try {
-      const res = await fetch("/api/notifications", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ event, message }),
-      });
-      if (res.ok) {
-        alert("Notification triggered!");
-      } else {
-        alert("Error triggering notification");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Error triggering notification");
-    }
-  };
+export default async function DashboardPage() {
+  // Fetch initial data
+  const events = Object.values(NotificationEventEnum.enum);
+  const initialUserCount = await getUserCountByEvent(events[0]);
 
   return (
     <div className="flex h-screen">
@@ -56,45 +40,12 @@ export default function DashboardPage() {
       {/* Main content */}
       <main className="flex-1 p-8">
         <h1 className="text-2xl font-bold mb-6">Trigger Notification</h1>
-        <form
-          className="space-y-4 max-w-lg"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleTriggerNotification();
-          }}
-        >
-          <div className="flex flex-col">
-            <label htmlFor="event" className="mb-1 font-medium">
-              Event Type
-            </label>
-            <select
-              id="event"
-              className="p-2 border rounded"
-              value={event}
-              onChange={(e) => setEvent(e.target.value)}
-            >
-              <option value="app_opened">App Opened</option>
-              <option value="streak_missed">Streak Missed</option>
-              <option value="goal_achieved">Goal Achieved</option>
-              <option value="inactive_user">Inactive User</option>
-              <option value="custom_event">Custom Event</option>
-            </select>
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="message" className="mb-1 font-medium">
-              Message
-            </label>
-            <Input
-              id="message"
-              placeholder="Enter notification message..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-            />
-          </div>
-          <Button type="submit" className="mt-4">
-            Trigger Notification
-          </Button>
-        </form>
+        <Suspense fallback={<div>Loading...</div>}>
+          <NotificationForm
+            events={events}
+            initialUserCount={initialUserCount}
+          />
+        </Suspense>
       </main>
     </div>
   );
